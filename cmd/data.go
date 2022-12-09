@@ -73,7 +73,6 @@ func executeDataWithRange(sensorFilter string, start, end int64) {
 	for _, jsonRecord := range records {
 		TUI_Info(fmt.Sprintf("%s", jsonRecord))
 	}
-
 }
 
 func executeDataLast(sensorFilter string) {
