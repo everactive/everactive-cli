@@ -14,9 +14,14 @@ The tool is compatible with Windows, macOS, and Linux.
 
 # Installation
 
-Download the binary for your platform.
+Download the binary for your platform from the Package Registry: https://gitlab.com/everactive/everactive-cli/-/packages/
+
 
 > TODO: brew, scoop, snap, etc?
+
+# Build
+
+Install golang V1.19+ and run the `build.sh` script.
 
 # Usage
 
