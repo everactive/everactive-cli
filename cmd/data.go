@@ -29,17 +29,16 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		sensorFlag := cmd.Flag("sensor")
 		rangeParam := cmd.Flag("range")
-		outputFileParam := cmd.Flag("output-file")
 		if sensorFlag != nil {
 			if len(rangeParam.Value.String()) == 0 || rangeParam.Value.String() == "last" {
-				executeDataLast(sensorFlag.Value.String(), outputFileParam.Value.String())
+				executeDataLast(sensorFlag.Value.String())
 			} else {
 				start, end := calculateRage(rangeParam.Value.String())
 				if start == 0 || end == 0 {
 					TUI_Error("invalid range")
 					os.Exit(1)
 				}
-				executeDataWithRange(sensorFlag.Value.String(), start, end, outputFileParam.Value.String())
+				executeDataWithRange(sensorFlag.Value.String(), start, end)
 			}
 		}
 	},
@@ -50,17 +49,16 @@ func init() {
 	dataCmd.Flags().String("sensor", "", "Required. Mac address of the sensor")
 	_ = dataCmd.MarkFlagRequired("sensor")
 	dataCmd.Flags().StringP("range", "r", "last", "Time range for the data: last (default), 1h, 10m, 100s, start-end timestamps. Max is 24h or 86400s")
-	dataCmd.Flags().StringP("output-file", "o", "", "Save data to this file")
-	dataCmd.Flags().StringP("format", "f", "json", "Output format: [json|csv]. Default is json")
+	//TODO: dataCmd.Flags().StringP("format", "f", "json", "Output format: [json|csv]. Default is json")
 }
 
-func executeDataWithRange(sensorFilter string, start, end int64, outputFile string) {
+func executeDataWithRange(sensorFilter string, start, end int64) {
 	//DebugEnabled
 	TUI_Debug(fmt.Sprintf("get readings from MAC: %s - Range:  %d - %d", sensorFilter, start, end))
 	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
 	response, err := api.GetSensorReadings(sensorFilter, start, end)
 	if err != nil {
-		TUI_Error(fmt.Sprintf("Failed to retrieved sensors: %s", err.Error()))
+		TUI_Error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))
 		return
 	}
 	records := make([]string, 0)
@@ -72,30 +70,22 @@ func executeDataWithRange(sensorFilter string, start, end int64, outputFile stri
 		}
 		records = append(records, string(jsonRecord))
 	}
-	if len(outputFile) == 0 {
-		for _, jsonRecord := range records {
-			TUI_Info(fmt.Sprintf("%s", jsonRecord))
-		}
-	} else {
-		outputToFile(records, outputFile)
+	for _, jsonRecord := range records {
+		TUI_Info(fmt.Sprintf("%s", jsonRecord))
 	}
+
 }
 
-func executeDataLast(sensorFilter string, outputFile string) {
+func executeDataLast(sensorFilter string) {
 	TUI_Debug(fmt.Sprintf("get last reading from MAC: %s ", sensorFilter))
 	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
 	response, err := api.GetSensorLastReading(sensorFilter)
 	if err != nil {
-		TUI_Error(fmt.Sprintf("Failed to retrieved sensors: %s", err.Error()))
+		TUI_Error(fmt.Sprintf( "Failed to retrieved sensors data: %s", err.Error()))
 		return
 	}
 	jsonRecord, err := json.Marshal(response.Data)
-	if len(outputFile) == 0 {
-		TUI_Info(fmt.Sprintf("%s", jsonRecord))
-	} else {
-		records := []string{string(jsonRecord)}
-		outputToFile(records, outputFile)
-	}
+	TUI_Info(fmt.Sprintf("%s", jsonRecord))
 }
 
 func calculateRage(rangeParam string) (int64, int64) {
@@ -119,21 +109,4 @@ func calculateRage(rangeParam string) (int64, int64) {
 	}
 
 	return start, end
-}
-
-func outputToFile(records []string, filePath string) {
-	f, err := os.Create(filePath)
-	if err != nil {
-		TUI_Error(fmt.Sprintf("error creating output file: %s", err.Error()))
-		os.Exit(1)
-	}
-	defer f.Close()
-	for _, r := range records {
-		_, err = f.WriteString(fmt.Sprintf("%s\n", r))
-		if err != nil {
-			TUI_Error(fmt.Sprintf("error writing to file: %s", err.Error()))
-			os.Exit(1)
-		}
-	}
-
 }

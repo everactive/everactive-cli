@@ -10,6 +10,21 @@ type GetSensorLastReadingRawResponse struct {
 	Data interface{} `json:"data"`
 }
 
+type SensorReading struct {
+	Scap                   float64   `json:"scap"`
+	Vcap                   float64   `json:"vcap"`
+	Schema                 string    `json:"schema"`
+	Timestamp              int64     `json:"timestamp"`
+	MacAddress             string    `json:"macAddress"`
+	RssiUplink             int       `json:"rssiUplink"`
+	ReadingDate            time.Time `json:"readingDate"`
+	Unsolicited            bool      `json:"unsolicited"`
+	SchemaVersion          string    `json:"schemaVersion"`
+	GatewaySerialNumber    string    `json:"gatewaySerialNumber"`
+	PacketNumberGateway    int       `json:"packetNumberGateway"`
+	PacketNumberEversensor int       `json:"packetNumberEversensor"`
+}
+
 type GetEversensorsShortResponse struct {
 	Data []struct {
 		Customer struct {

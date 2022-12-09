@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -32,7 +31,7 @@ func init() {
 
 func executeListSensors() {
 	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
-	sensors,err:=api.GetSensorsList()
+	sensors, err := api.GetSensorsList()
 	if err != nil {
 		TUI_Error(fmt.Sprintf("Failed to retrieved sensors: %s", err.Error()))
 		return
@@ -44,4 +43,3 @@ func executeListSensors() {
 			record.LastAssociation.GatewaySerialNumber, record.LastAssociation.Timestamp))
 	}
 }
-
