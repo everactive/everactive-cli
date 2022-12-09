@@ -29,10 +29,10 @@ and the Client Secret. This command needs to be run only once.`,
 		viper.Set(lib.EVERACTIVE_CLIENT_SECRET, clientSecret)
 		err = viper.WriteConfigAs(lib.ConfigurationFile)
 		if err != nil {
-			TUI_Error(fmt.Sprintf("error writing configuration file %s", err.Error()))
+			Tui_error(fmt.Sprintf("error writing configuration file %s", err.Error()))
 			os.Exit(1)
 		}
-		TUI_Info(fmt.Sprintf("saved configuration in %s", lib.ConfigurationFile))
+		Tui_info(fmt.Sprintf("saved configuration in %s", lib.ConfigurationFile))
 	},
 }
 
@@ -42,9 +42,9 @@ var credentialsFindCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := os.Stat(lib.ConfigurationFile)
 		if err != nil {
-			TUI_Error(fmt.Sprintf("configuration file could not be found at %s", lib.ConfigurationPath))
+			Tui_error(fmt.Sprintf("configuration file could not be found at %s", lib.ConfigurationPath))
 		}
-		TUI_Info(fmt.Sprintf("configuration file is located at %s", lib.ConfigurationFile))
+		Tui_info(fmt.Sprintf("configuration file is located at %s", lib.ConfigurationFile))
 	},
 }
 

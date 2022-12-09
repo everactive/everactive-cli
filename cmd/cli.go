@@ -5,23 +5,23 @@ import (
 	"github.com/fatih/color"
 )
 
-func TUI_Info(message string) {
+func Tui_info(message string) {
 	color.Cyan(message)
 }
 
-func TUI_Error(message string) {
+func Tui_error(message string) {
 	color.Red(message)
 }
 
-func TUI_Warning(message string) {
+func Tui_warning(message string) {
 	color.Yellow(message)
 }
 
-func TUI_Message(message string) {
+func Tui_message(message string) {
 	fmt.Println(message)
 }
 
-func TUI_Debug(message string) {
+func Tui_debug(message string) {
 	if DebugEnabled {
 		color.White(message)
 	}

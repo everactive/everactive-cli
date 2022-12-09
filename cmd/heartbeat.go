@@ -25,9 +25,9 @@ func init() {
 func executeHeartbeat() {
 	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
 	if api.Health() {
-		TUI_Info("the connection to the Everactive API is healthy")
+		Tui_info("the connection to the Everactive API is healthy")
 	} else {
-		TUI_Error("something is wrong. Try enabling the debug option to get more information")
+		Tui_error("something is wrong. Try enabling the debug option to get more information")
 		os.Exit(1)
 	}
 }

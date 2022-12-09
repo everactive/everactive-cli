@@ -30,10 +30,10 @@ var streamCmd = &cobra.Command{
 		if sensorFlag != nil {
 			done := make(chan os.Signal, 1)
 			signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
-			TUI_Debug("press ctrl+c to stop...")
+			Tui_debug("press ctrl+c to stop...")
 			go streamLoop(sensorFlag.Value.String())
 			<-done // Will block here until user hits ctrl+c
-			TUI_Debug("good bye")
+			Tui_debug("good bye")
 		}
 	},
 }
@@ -50,29 +50,29 @@ func streamLoop(sensorFilter string) {
 		endTime := time.Now()
 		start := endTime.Add(time.Minute * -loopPeriodMinutes).Unix()
 		end := endTime.Unix()
-		TUI_Debug(fmt.Sprintf("readings from start %d end %d", start, end))
+		Tui_debug(fmt.Sprintf("readings from start %d end %d", start, end))
 		time.Sleep(time.Second * loopDelaySeconds)
 		response, err := api.GetSensorReadings(sensorFilter, start, end)
 		if err != nil {
-			TUI_Error(fmt.Sprintf("failed to retrieved sensors data: %s", err.Error()))
+			Tui_error(fmt.Sprintf("failed to retrieved sensors data: %s", err.Error()))
 			os.Exit(1)
 		}
 		var reading lib.SensorReading
 		for _, record := range response.Data {
 			jsonRecord, err := json.Marshal(record)
 			if err != nil {
-				TUI_Error(fmt.Sprintf("error processing response %s", err.Error()))
+				Tui_error(fmt.Sprintf("error processing response %s", err.Error()))
 				os.Exit(1)
 			}
 			err = json.Unmarshal(jsonRecord, &reading)
 			if err != nil {
-				TUI_Error(fmt.Sprintf("error processing response %s", err.Error()))
+				Tui_error(fmt.Sprintf("error processing response %s", err.Error()))
 				os.Exit(1)
 			}
 			if reading.Timestamp > lastTimestamp {
 				lastTimestamp = reading.Timestamp
-				TUI_Debug(fmt.Sprintf("pkt %d - timestamp: %s", reading.PacketNumberGateway, reading.ReadingDate))
-				TUI_Info(fmt.Sprintf("%s", jsonRecord))
+				Tui_debug(fmt.Sprintf("pkt %d - timestamp: %s", reading.PacketNumberGateway, reading.ReadingDate))
+				Tui_info(fmt.Sprintf("%s", jsonRecord))
 			}
 		}
 	}

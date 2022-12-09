@@ -11,7 +11,7 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version of the application",
 	Long: "",
 	Run: func(cmd *cobra.Command, args []string) {
-		TUI_Info(lib.Version)
+		Tui_info(lib.Version)
 	},
 }
 

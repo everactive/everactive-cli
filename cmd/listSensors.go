@@ -26,12 +26,12 @@ func executeListSensors() {
 	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
 	sensors, err := api.GetSensorsList()
 	if err != nil {
-		TUI_Error(fmt.Sprintf("Failed to retrieved sensors: %s", err.Error()))
+		Tui_error(fmt.Sprintf("Failed to retrieved sensors: %s", err.Error()))
 		os.Exit(1)
 	}
-	TUI_Info(fmt.Sprintf("Total count: %d", sensors.PaginationInfo.TotalItems))
+	Tui_info(fmt.Sprintf("Total count: %d", sensors.PaginationInfo.TotalItems))
 	for _, record := range sensors.Data {
-		TUI_Info(fmt.Sprintf("Mac: %s - Type: %s - FW: %s - Association: %s %s",
+		Tui_info(fmt.Sprintf("Mac: %s - Type: %s - FW: %s - Association: %s %s",
 			record.MacAddress, record.Type, record.LastInfo.FirmwareVersion,
 			record.LastAssociation.GatewaySerialNumber, record.LastAssociation.Timestamp))
 	}
