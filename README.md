@@ -79,6 +79,14 @@ Mac: bc:5e:a1:00:00:00:5e:19 - Type: Environmental - FW: tinytiger-f0/v0.5.7-r27
 
 ```
 
+## Streaming Data
+
+The streaming mode polls the Everactive API every few seconds to get the latest set of readings. The data is received as soon as it becomes available in our cloud service.
+
+```
+$ everactive-cli stream --sensor bc:5e:a1:00:00:00:5e:13
+```
+
 ## Sensor Data
 
 Retrieve the data from a sensor for a specific time range. The data is return in Json format.
@@ -104,10 +112,4 @@ To get data from a specific time range, use UNIX timestamps:
 $ everactive-cli data --sensor bc:5e:a1:00:00:00:5e:13 --range 1670507054-1670533006
 ```
 
-## Streaming Data
 
-The streaming mode polls the Everactive API every few seconds to get the latest set of readings. The data is received as soon as it becomes available in our cloud service.
-
-```
-$ everactive-cli stream --sensor bc:5e:a1:00:00:00:5e:13
-```
