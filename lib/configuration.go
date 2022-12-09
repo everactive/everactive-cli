@@ -21,7 +21,6 @@ var DefaultConfigParams = map[string]interface{}{
 }
 
 func InitConfiguration() {
-	Version="set_at_build"
 	HomeDirectory, _ = os.UserHomeDir()
 	ConfigurationPath = fmt.Sprintf("%s/.everactive", HomeDirectory)
 	ConfigurationFile= fmt.Sprintf("%s/%s", ConfigurationPath, EVERACTIVE_CONFIGURATION_FILE)
