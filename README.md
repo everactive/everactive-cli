@@ -1,7 +1,12 @@
 # Everactive Edge Platform CLI
 
 The `everactive-cli` is a tool to interact with the Everactive APIs from your terminal.
-It features commands to list Eversensors and to retrieve data on demand and in streaming mode.
+
+It features:
+ * list sensors
+ * get data in streaming mode (polling, really)
+ * get data for a time range
+ * clean json output to redirect to a file
 
 ![everactive-cli](docs/everactive-cli-demo.gif)
 
