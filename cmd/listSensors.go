@@ -1,6 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -8,18 +5,14 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"gitlab.com/everactive/everactive-cli/services"
+	"os"
 )
 
 // listSensorsCmd represents the listSensors command
 var listSensorsCmd = &cobra.Command{
 	Use:   "list-sensors",
-	Short: "Get a list of active Eversensors",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Get a list of the Eversensors in your account",
+	Long: `Retrieves and prints the list of the eversensors that are visible to this API account.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		executeListSensors()
 	},
@@ -34,11 +27,11 @@ func executeListSensors() {
 	sensors, err := api.GetSensorsList()
 	if err != nil {
 		TUI_Error(fmt.Sprintf("Failed to retrieved sensors: %s", err.Error()))
-		return
+		os.Exit(1)
 	}
 	TUI_Info(fmt.Sprintf("Total count: %d", sensors.PaginationInfo.TotalItems))
 	for _, record := range sensors.Data {
-		TUI_Info(fmt.Sprintf("%s - Type: %s - FW: %s - Association: %s %s",
+		TUI_Info(fmt.Sprintf("Mac: %s - Type: %s - FW: %s - Association: %s %s",
 			record.MacAddress, record.Type, record.LastInfo.FirmwareVersion,
 			record.LastAssociation.GatewaySerialNumber, record.LastAssociation.Timestamp))
 	}

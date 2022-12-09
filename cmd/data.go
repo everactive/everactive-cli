@@ -1,6 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -19,13 +16,12 @@ import (
 // dataCmd represents the data command
 var dataCmd = &cobra.Command{
 	Use:   "data",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Retrieve readings data from a sensor and a given time range.",
+	Long: `The sensor MAC address is required. The time range can be set as:
+duration: get the readings from a period of time until now. Example:  1h, 10m, 100s
+last: get the last reading regardless of its date and time.
+start-end: Unix timestamps range. Example: 1670507054-1670533006
+The maximum range is 24 hours`,
 	Run: func(cmd *cobra.Command, args []string) {
 		sensorFlag := cmd.Flag("sensor")
 		rangeParam := cmd.Flag("range")
@@ -49,7 +45,6 @@ func init() {
 	dataCmd.Flags().String("sensor", "", "Required. Mac address of the sensor")
 	_ = dataCmd.MarkFlagRequired("sensor")
 	dataCmd.Flags().StringP("range", "r", "last", "Time range for the data: last (default), 1h, 10m, 100s, start-end timestamps. Max is 24h or 86400s")
-	//TODO: dataCmd.Flags().StringP("format", "f", "json", "Output format: [json|csv]. Default is json")
 }
 
 func executeDataWithRange(sensorFilter string, start, end int64) {
@@ -59,7 +54,7 @@ func executeDataWithRange(sensorFilter string, start, end int64) {
 	response, err := api.GetSensorReadings(sensorFilter, start, end)
 	if err != nil {
 		TUI_Error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))
-		return
+		os.Exit(1)
 	}
 	records := make([]string, 0)
 	for _, record := range response.Data {
@@ -81,7 +76,7 @@ func executeDataLast(sensorFilter string) {
 	response, err := api.GetSensorLastReading(sensorFilter)
 	if err != nil {
 		TUI_Error(fmt.Sprintf( "Failed to retrieved sensors data: %s", err.Error()))
-		return
+		os.Exit(1)
 	}
 	jsonRecord, err := json.Marshal(response.Data)
 	TUI_Info(fmt.Sprintf("%s", jsonRecord))

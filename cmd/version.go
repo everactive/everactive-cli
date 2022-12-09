@@ -1,11 +1,6 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"gitlab.com/everactive/everactive-cli/lib"
 )
@@ -16,7 +11,7 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version of the application",
 	Long: "",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(lib.Version)
+		TUI_Info(lib.Version)
 	},
 }
 

@@ -1,6 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -26,16 +23,10 @@ const (
 // streamCmd represents the stream command
 var streamCmd = &cobra.Command{
 	Use:   "stream",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: fmt.Sprintf("Retrieve the eversensor readings in streaming mode, starting now and polling for new data every %d seconds", loopDelaySeconds),
+	Long: `The sensor MAC address is required. To stop the stream type ctrl+c`,
 	Run: func(cmd *cobra.Command, args []string) {
 		sensorFlag := cmd.Flag("sensor")
-		//outputFileParam := cmd.Flag("output-file")
 		if sensorFlag != nil {
 			done := make(chan os.Signal, 1)
 			signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
@@ -64,7 +55,7 @@ func streamLoop(sensorFilter string) {
 		response, err := api.GetSensorReadings(sensorFilter, start, end)
 		if err != nil {
 			TUI_Error(fmt.Sprintf("failed to retrieved sensors data: %s", err.Error()))
-			return
+			os.Exit(1)
 		}
 		var reading lib.SensorReading
 		for _, record := range response.Data {
