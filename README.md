@@ -27,30 +27,7 @@ Install golang V1.19+ and run the `build.sh` script.
 
 The tool provides different commands. Type `everactive-cli` to get a list of options and information.
 
-```
-$ everactive-cli
-Set up your API credentials via the "credentials" command or as environment variables.
-After that, you can list sensors, get readings, or stream data from the API.
-
-Usage:
-  everactive-cli [command]
-
-Available Commands:
-  completion   Generate the autocompletion script for the specified shell
-  credentials  Credentials configuration
-  data         Retrieve readings data from a sensor and a given time range.
-  heartbeat    Check the connection to the Everactive API
-  help         Help about any command
-  list-sensors Get a list of the Eversensors in your account
-  stream       Retrieve the eversensor readings in streaming mode, starting now and polling for new data every 5 seconds
-  version      Print the version of the application
-
-Flags:
-  -d, --debug   enable debug mode
-  -h, --help    help for everactive-cli
-
-Use "everactive-cli [command] --help" for more information about a command.
-```
+![everactive-cli command](docs/everactive-cli-win.png)
 
 ## Credentials Configuration
 
@@ -67,6 +44,8 @@ Please enter the Client ID: your_api_key
 Please enter the Client Secret: ****************************************************************
 saved configuration in /Users/ford.prefect/.everactive/config.yaml
 ```
+
+> On Windows the configuration file would save at C:\Users\ford.prefect/.everactive/config.yaml
 
 ### 2. Environment variables
 
