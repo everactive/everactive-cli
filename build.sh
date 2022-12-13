@@ -10,7 +10,7 @@ GOPRIVATE=gitlab.com/everactive/*
 RELEASE_PATH="release"
 #GOPATH="$(go env GOPATH)"
 #PATH="$PATH:$GOPATH/bin"
-BINARY_VERSION=0.1
+BINARY_VERSION=0.2
 
 #mkdir -p $CODEPATH && mkdir -p $BINPATH
 mkdir -p ${RELEASE_PATH}
@@ -20,21 +20,25 @@ _GOARCH=amd64
 
 for _GOOS in "${TARGET_GOOS[@]}"
 do
+  EXT=""
   if [[ "${_GOOS}" == "arm" ]]; then
     _GOOS="linux"
     _GOARCH="arm"
   else
     _GOARCH="amd64"
   fi
+  if [[ "${_GOOS}" == "windows" ]]; then
+    EXT=".exe"
+  fi
 set -x
 env GOOS=${_GOOS} GOARCH=${_GOARCH} \
 go build \
--o ${RELEASE_PATH}/everactive-cli-${_GOOS}-${_GOARCH} \
+-o ${RELEASE_PATH}/everactive-cli-${_GOOS}-${_GOARCH}${EXT} \
 -ldflags \
 "-X gitlab.com/everactive/everactive-cli/lib.Version=${BINARY_VERSION}" \
 main.go
 
-tar -czf "${RELEASE_PATH}/everactive-cli-${_GOOS}-${_GOARCH}-${BINARY_VERSION}.tar.gz" "${RELEASE_PATH}/everactive-cli-${_GOOS}-${_GOARCH}"
+tar -czf "${RELEASE_PATH}/everactive-cli-${_GOOS}-${_GOARCH}-${BINARY_VERSION}.tar.gz" "${RELEASE_PATH}/everactive-cli-${_GOOS}-${_GOARCH}${EXT}"
 set +x
 done
 realpath ${RELEASE_PATH}

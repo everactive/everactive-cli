@@ -14,7 +14,7 @@ import (
 )
 
 var lastTimestamp = int64(0)
-
+var ringBell = false
 const (
 	loopPeriodMinutes = 10
 	loopDelaySeconds  = 5
@@ -42,6 +42,8 @@ func init() {
 	rootCmd.AddCommand(streamCmd)
 	streamCmd.Flags().String("sensor", "", "Required. Mac address of the sensor")
 	_ = streamCmd.MarkFlagRequired("sensor")
+	streamCmd.Flags().BoolVarP(&ringBell, "bell", "b", false, "Ring the bell on every reading")
+
 }
 
 func streamLoop(sensorFilter string) {
@@ -73,6 +75,9 @@ func streamLoop(sensorFilter string) {
 				lastTimestamp = reading.Timestamp
 				Tui_debug(fmt.Sprintf("pkt %d - timestamp: %s", reading.PacketNumberGateway, reading.ReadingDate))
 				Tui_info(fmt.Sprintf("%s", jsonRecord))
+				if ringBell {
+					Tui_bell()
+				}
 			}
 		}
 	}

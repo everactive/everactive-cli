@@ -26,3 +26,7 @@ func Tui_debug(message string) {
 		color.White(message)
 	}
 }
+
+func Tui_bell() {
+	fmt.Print("\a")
+}
