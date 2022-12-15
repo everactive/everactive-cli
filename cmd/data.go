@@ -75,7 +75,7 @@ func executeDataLast(sensorFilter string) {
 	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
 	response, err := api.GetSensorLastReading(sensorFilter)
 	if err != nil {
-		Tui_error(fmt.Sprintf( "Failed to retrieved sensors data: %s", err.Error()))
+		Tui_error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))
 		os.Exit(1)
 	}
 	jsonRecord, err := json.Marshal(response.Data)
@@ -85,7 +85,7 @@ func executeDataLast(sensorFilter string) {
 func calculateRage(rangeParam string) (int64, int64) {
 	start := int64(0)
 	end := int64(0)
-
+	limit := time.Hour * 24
 	matched, err := regexp.Match(`\d+-\d+`, []byte(rangeParam))
 	if err == nil && matched {
 		toks := strings.Split(rangeParam, "-")
@@ -93,12 +93,16 @@ func calculateRage(rangeParam string) (int64, int64) {
 		end, _ = strconv.ParseInt(toks[1], 10, 64)
 		return start, end
 	}
-
 	matched, err = regexp.Match(`\d+[hms]`, []byte(rangeParam))
 	if err == nil && matched {
 		offset, _ := time.ParseDuration(rangeParam)
-		endTime := time.Now()
+		if offset.Seconds() > limit.Seconds() {
+			Tui_error("Invalid range. The maximum is 24 hours.")
+			os.Exit(1)
+		}
+		endTime := time.Now().UTC()
 		start = endTime.Add(-offset).Unix()
+		Tui_debug(fmt.Sprintf("range %s - %s", endTime.Add(-offset), endTime))
 		end = endTime.Unix()
 	}
 
