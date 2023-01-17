@@ -10,7 +10,7 @@ GOPRIVATE=gitlab.com/everactive/*
 RELEASE_PATH="release"
 #GOPATH="$(go env GOPATH)"
 #PATH="$PATH:$GOPATH/bin"
-BINARY_VERSION=0.2
+BINARY_VERSION=0.3
 
 #mkdir -p $CODEPATH && mkdir -p $BINPATH
 mkdir -p ${RELEASE_PATH}
