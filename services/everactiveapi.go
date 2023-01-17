@@ -16,18 +16,17 @@ type EveractiveAPI interface {
 	Health() bool
 	GetSensorsList() (*lib.GetEversensorsShortResponse, error)
 	GetReadings(sensorMac string)
+	GetSensorLastReading(mac string)
 }
 
 type EveractiveAPIService struct {
 	debug  bool
-	ctx    context.Context
 	client *resty.Client
 }
 
-func NewEveractiveAPIService(debug bool, ctx context.Context) EveractiveAPIService {
+func NewEveractiveAPIService(debug bool) EveractiveAPIService {
 	service := EveractiveAPIService{
 		debug:  debug,
-		ctx:    ctx,
 		client: GetApiClient(debug)}
 	return service
 }

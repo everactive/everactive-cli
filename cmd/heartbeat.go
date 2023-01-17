@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"github.com/spf13/cobra"
 	"gitlab.com/everactive/everactive-cli/services"
 	"os"
@@ -23,7 +22,7 @@ func init() {
 }
 
 func executeHeartbeat() {
-	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
+	api := services.NewEveractiveAPIService(DebugEnabled)
 	if api.Health() {
 		Tui_info("the connection to the Everactive API is healthy")
 	} else {

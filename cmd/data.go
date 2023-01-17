@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -50,7 +49,7 @@ func init() {
 func executeDataWithRange(sensorFilter string, start, end int64) {
 	//DebugEnabled
 	Tui_debug(fmt.Sprintf("get readings from MAC: %s - Range:  %d - %d", sensorFilter, start, end))
-	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
+	api := services.NewEveractiveAPIService(DebugEnabled)
 	response, err := api.GetSensorReadings(sensorFilter, start, end)
 	if err != nil {
 		Tui_error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))
@@ -72,7 +71,7 @@ func executeDataWithRange(sensorFilter string, start, end int64) {
 
 func executeDataLast(sensorFilter string) {
 	Tui_debug(fmt.Sprintf("get last reading from MAC: %s ", sensorFilter))
-	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
+	api := services.NewEveractiveAPIService(DebugEnabled)
 	response, err := api.GetSensorLastReading(sensorFilter)
 	if err != nil {
 		Tui_error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))

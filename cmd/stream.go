@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -47,7 +46,7 @@ func init() {
 }
 
 func streamLoop(sensorFilter string) {
-	api := services.NewEveractiveAPIService(false, context.Background())
+	api := services.NewEveractiveAPIService(false)
 	for {
 		endTime := time.Now()
 		start := endTime.Add(time.Minute * -loopPeriodMinutes).Unix()

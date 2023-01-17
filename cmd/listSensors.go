@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"github.com/spf13/cobra"
 	"gitlab.com/everactive/everactive-cli/services"
@@ -23,7 +22,7 @@ func init() {
 }
 
 func executeListSensors() {
-	api := services.NewEveractiveAPIService(DebugEnabled, context.Background())
+	api := services.NewEveractiveAPIService(DebugEnabled)
 	sensors, err := api.GetSensorsList()
 	if err != nil {
 		Tui_error(fmt.Sprintf("Failed to retrieved sensors: %s", err.Error()))

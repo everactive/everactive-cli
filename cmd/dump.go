@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -40,7 +39,7 @@ func init() {
 }
 
 func dumpData(sensorFilter string, days int8) {
-	api := services.NewEveractiveAPIService(false, context.Background())
+	api := services.NewEveractiveAPIService(false)
 	end := time.Now().UTC()
 	start := end
 	var d int8
