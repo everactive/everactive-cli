@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
-	"gitlab.com/everactive/everactive-cli/services"
 	"os"
 	"time"
 )
@@ -29,6 +28,9 @@ To avoid the hitting the rate limits it pauses between queries.`,
 			dumpData(sensorFlag.Value.String(), dumpDays)
 		}
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		initAPIClient()
+	},
 }
 
 func init() {
@@ -39,7 +41,6 @@ func init() {
 }
 
 func dumpData(sensorFilter string, days int8) {
-	api := services.NewEveractiveAPIService(false)
 	end := time.Now().UTC()
 	start := end
 	var d int8
@@ -47,7 +48,7 @@ func dumpData(sensorFilter string, days int8) {
 		start = end.Add(-24 * time.Hour)
 		Tui_debug(fmt.Sprintf("get readings from start %s end %s", start, end))
 
-		response, err := api.GetSensorReadings(sensorFilter, start.Unix(), end.Unix())
+		response, err := ApiClient.GetSensorReadings(sensorFilter, start.Unix(), end.Unix())
 		if err != nil {
 			Tui_error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))
 			os.Exit(1)

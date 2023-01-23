@@ -10,30 +10,38 @@ import (
 	"gitlab.com/everactive/everactive-cli/lib"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
+	"log"
 )
 
 type EveractiveAPI interface {
 	Health() bool
 	GetSensorsList() (*lib.GetEversensorsShortResponse, error)
-	GetReadings(sensorMac string)
-	GetSensorLastReading(mac string)
+	GetSensorReadings(mac string, start, end int64) (*lib.GetSensorReadingsRawResponse, error)
+	GetSensorLastReading(mac string) (*lib.GetSensorLastReadingRawResponse, error)
 }
 
 type EveractiveAPIService struct {
-	debug  bool
-	client *resty.Client
+	Debug  bool
+	Client *resty.Client
 }
 
-func NewEveractiveAPIService(debug bool) EveractiveAPIService {
+func NewEveractiveAPIService(client *resty.Client, debug bool) EveractiveAPIService {
 	service := EveractiveAPIService{
-		debug:  debug,
-		client: GetApiClient(debug)}
+		Debug: debug,
+	}
+	if client == nil {
+		client = GetApiClient(debug)
+	}
+	service.Client = client
 	return service
 }
 
 func (api EveractiveAPIService) Health() bool {
 	endpoint := fmt.Sprintf("%s/ds/v1/health", viper.GetString(lib.EVERACTIVE_API_URL))
-	resp, err := api.client.R().Get(endpoint)
+	if api.Debug {
+		log.Println(fmt.Sprintf("calling api Health at %s", endpoint))
+	}
+	resp, err := api.Client.R().Get(endpoint)
 	if err != nil {
 		return false
 	}
@@ -42,7 +50,10 @@ func (api EveractiveAPIService) Health() bool {
 
 func (api EveractiveAPIService) GetSensorsList() (*lib.GetEversensorsShortResponse, error) {
 	endpoint := fmt.Sprintf("%s/ds/v1/eversensors", viper.GetString(lib.EVERACTIVE_API_URL))
-	resp, err := api.client.R().Get(endpoint)
+	if api.Debug {
+		log.Println(fmt.Sprintf("calling api GetSensorsList at %s", endpoint))
+	}
+	resp, err := api.Client.R().Get(endpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +72,10 @@ func (api EveractiveAPIService) GetSensorsList() (*lib.GetEversensorsShortRespon
 func (api EveractiveAPIService) GetSensorReadings(mac string, start, end int64) (*lib.GetSensorReadingsRawResponse, error) {
 	endpoint := fmt.Sprintf("%s/ds/v1/eversensors/%s/readings?start-time=%d&end-time=%d",
 		viper.GetString(lib.EVERACTIVE_API_URL), mac, start, end)
-	resp, err := api.client.R().Get(endpoint)
+	if api.Debug {
+		log.Println(fmt.Sprintf("calling api GetSensorReadings at %s", endpoint))
+	}
+	resp, err := api.Client.R().Get(endpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +93,10 @@ func (api EveractiveAPIService) GetSensorReadings(mac string, start, end int64) 
 func (api EveractiveAPIService) GetSensorLastReading(mac string) (*lib.GetSensorLastReadingRawResponse, error) {
 	endpoint := fmt.Sprintf("%s/ds/v1/eversensors/%s/readings/last",
 		viper.GetString(lib.EVERACTIVE_API_URL), mac)
-	resp, err := api.client.R().Get(endpoint)
+	if api.Debug {
+		log.Println(fmt.Sprintf("calling api GetSensorLastReading at %s", endpoint))
+	}
+	resp, err := api.Client.R().Get(endpoint)
 	if err != nil {
 		return nil, err
 	}

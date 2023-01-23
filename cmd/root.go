@@ -2,10 +2,12 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"gitlab.com/everactive/everactive-cli/services"
 	"os"
 )
 
 var DebugEnabled bool
+var ApiClient services.EveractiveAPI
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -28,4 +30,8 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&DebugEnabled, "debug", "d", false, "enable debug mode")
 }
 
-
+func initAPIClient() {
+	if ApiClient == nil {
+		ApiClient = services.NewEveractiveAPIService(services.GetApiClient(DebugEnabled), DebugEnabled)
+	}
+}

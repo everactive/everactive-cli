@@ -6,15 +6,21 @@ import (
 )
 
 func Tui_info(message string) {
-	color.Cyan(message)
+	color.Set(color.FgCyan)
+	fmt.Println(message)
+	color.Unset()
 }
 
 func Tui_error(message string) {
-	color.Red(message)
+	color.Set(color.FgRed)
+	fmt.Println(message)
+	color.Unset()
 }
 
 func Tui_warning(message string) {
-	color.Yellow(message)
+	color.Set(color.FgYellow)
+	fmt.Println(message)
+	color.Unset()
 }
 
 func Tui_message(message string) {
@@ -23,7 +29,7 @@ func Tui_message(message string) {
 
 func Tui_debug(message string) {
 	if DebugEnabled {
-		color.White(message)
+		fmt.Println(message)
 	}
 }
 

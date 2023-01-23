@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
-	"gitlab.com/everactive/everactive-cli/services"
 	"os"
 	"regexp"
 	"strconv"
@@ -28,14 +27,17 @@ The maximum range is 24 hours`,
 			if len(rangeParam.Value.String()) == 0 || rangeParam.Value.String() == "last" {
 				executeDataLast(sensorFlag.Value.String())
 			} else {
-				start, end := calculateRage(rangeParam.Value.String())
+				start, end := CalculateRage(rangeParam.Value.String())
 				if start == 0 || end == 0 {
-					Tui_error("invalid range")
+					Tui_error("Invalid range. The maximum is 24 hours.")
 					os.Exit(1)
 				}
 				executeDataWithRange(sensorFlag.Value.String(), start, end)
 			}
 		}
+	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		initAPIClient()
 	},
 }
 
@@ -49,8 +51,8 @@ func init() {
 func executeDataWithRange(sensorFilter string, start, end int64) {
 	//DebugEnabled
 	Tui_debug(fmt.Sprintf("get readings from MAC: %s - Range:  %d - %d", sensorFilter, start, end))
-	api := services.NewEveractiveAPIService(DebugEnabled)
-	response, err := api.GetSensorReadings(sensorFilter, start, end)
+
+	response, err := ApiClient.GetSensorReadings(sensorFilter, start, end)
 	if err != nil {
 		Tui_error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))
 		os.Exit(1)
@@ -71,8 +73,7 @@ func executeDataWithRange(sensorFilter string, start, end int64) {
 
 func executeDataLast(sensorFilter string) {
 	Tui_debug(fmt.Sprintf("get last reading from MAC: %s ", sensorFilter))
-	api := services.NewEveractiveAPIService(DebugEnabled)
-	response, err := api.GetSensorLastReading(sensorFilter)
+	response, err := ApiClient.GetSensorLastReading(sensorFilter)
 	if err != nil {
 		Tui_error(fmt.Sprintf("Failed to retrieved sensors data: %s", err.Error()))
 		os.Exit(1)
@@ -81,7 +82,7 @@ func executeDataLast(sensorFilter string) {
 	Tui_info(fmt.Sprintf("%s", jsonRecord))
 }
 
-func calculateRage(rangeParam string) (int64, int64) {
+func CalculateRage(rangeParam string) (int64, int64) {
 	start := int64(0)
 	end := int64(0)
 	limit := time.Hour * 24
@@ -96,8 +97,7 @@ func calculateRage(rangeParam string) (int64, int64) {
 	if err == nil && matched {
 		offset, _ := time.ParseDuration(rangeParam)
 		if offset.Seconds() > limit.Seconds() {
-			Tui_error("Invalid range. The maximum is 24 hours.")
-			os.Exit(1)
+			return 0,0
 		}
 		endTime := time.Now().UTC()
 		start = endTime.Add(-offset).Unix()

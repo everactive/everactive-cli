@@ -23,6 +23,13 @@ Download the binary for your platform from the Package Registry: https://gitlab.
 
 Install golang V1.19+ and run the `build.sh` script.
 
+
+## Tests
+
+```bash
+go test -v ./tests
+```
+
 # Usage
 
 The tool provides different commands. Type `everactive-cli` to get a list of options and information.

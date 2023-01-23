@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"gitlab.com/everactive/everactive-cli/lib"
-	"gitlab.com/everactive/everactive-cli/services"
 	"os"
 	"os/signal"
 	"syscall"
@@ -35,6 +34,9 @@ var streamCmd = &cobra.Command{
 			Tui_debug("good bye")
 		}
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		initAPIClient()
+	},
 }
 
 func init() {
@@ -46,14 +48,13 @@ func init() {
 }
 
 func streamLoop(sensorFilter string) {
-	api := services.NewEveractiveAPIService(false)
 	for {
 		endTime := time.Now()
 		start := endTime.Add(time.Minute * -loopPeriodMinutes).Unix()
 		end := endTime.Unix()
 		Tui_debug(fmt.Sprintf("readings from start %d end %d", start, end))
 		time.Sleep(time.Second * loopDelaySeconds)
-		response, err := api.GetSensorReadings(sensorFilter, start, end)
+		response, err := ApiClient.GetSensorReadings(sensorFilter, start, end)
 		if err != nil {
 			Tui_error(fmt.Sprintf("failed to retrieved sensors data: %s", err.Error()))
 			os.Exit(1)
