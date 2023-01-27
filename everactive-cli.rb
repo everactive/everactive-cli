@@ -5,20 +5,21 @@
 class EveractiveCli < Formula
   desc "CLI for the Everactive IoT Platform"
   homepage "https://everactive.com"
-  version "0.4.2"
+  version "0.4.3"
+  license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.2/everactive-cli_Darwin_arm64.tar.gz"
-      sha256 "3b74b89daef547f571d6cb18a85372a51d4b82622f37f42d5d2822574f5fc3fa"
+      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.3/everactive-cli_Darwin_arm64.tar.gz"
+      sha256 "aea5542c9335da56f8251a24c5088605c70b108b4ea32c9ea948e53e90f623fd"
 
       def install
         bin.install "everactive-cli"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.2/everactive-cli_Darwin_x86_64.tar.gz"
-      sha256 "b44ed1807ba32d2caf50034c6b9a8ba2981268ec826c54b9c711e4cb12658e0f"
+      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.3/everactive-cli_Darwin_x86_64.tar.gz"
+      sha256 "00179bae03060c1e6e70d7b64c5b6dae9e4ab0f02c3acf622762bada9e4c7384"
 
       def install
         bin.install "everactive-cli"
@@ -28,16 +29,16 @@ class EveractiveCli < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.2/everactive-cli_Linux_arm64.tar.gz"
-      sha256 "0e042dce17c0d482279aac023a445fdeb284646c082a4614213096d4639fd413"
+      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.3/everactive-cli_Linux_arm64.tar.gz"
+      sha256 "d04e598a4a3599c1a973febc8145669745c95c8be15fbba747cdd3dfa136f12d"
 
       def install
         bin.install "everactive-cli"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.2/everactive-cli_Linux_x86_64.tar.gz"
-      sha256 "3ff77013c8f1d26fcdcd54a9f0f3f02edf254dc6accc4b05b030da0dc88df969"
+      url "https://github.com/everactive/everactive-cli/releases/download/v0.4.3/everactive-cli_Linux_x86_64.tar.gz"
+      sha256 "709362c59ea061710dd72c9907cd4838117009b19ae311e2a7e6547b9b431f56"
 
       def install
         bin.install "everactive-cli"
