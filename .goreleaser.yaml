@@ -52,6 +52,7 @@ brews:
       email: "developers@everactive.com"
     homepage: "https://everactive.com"
     description: "CLI for the Everactive IoT Platform"
+    license: "MIT"
 # The lines beneath this are called `modelines`. See `:help modeline`
 # Feel free to remove those if you don't want/use them.
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
