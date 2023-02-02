@@ -15,6 +15,8 @@ builds:
       - amd64
       - arm64
     main: main.go
+    #ldflags:
+    #  - -X "gitlab.com/everactive/everactive-cli/lib.Version={{.Version}}"
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
@@ -53,6 +55,24 @@ brews:
     homepage: "https://everactive.com"
     description: "CLI for the Everactive IoT Platform"
     license: "MIT"
+
+snapcrafts:
+  -
+    id: everactive-cli-snap
+    name: carlos-everactive-cli
+    publish: true
+    summary: CLI for the Everactive IoT Platform
+    description: A tool to interact with the Everactive IoT Platform APIs from the command line
+    grade: devel
+    confinement: strict
+    base: core20
+    license: MIT
+    plugs:
+      personal-files:
+        write:
+          - $HOME/.everactive
+          - $HOME/.everactive/config.yaml
+
 # The lines beneath this are called `modelines`. See `:help modeline`
 # Feel free to remove those if you don't want/use them.
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
