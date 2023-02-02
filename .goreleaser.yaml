@@ -59,11 +59,11 @@ brews:
 snapcrafts:
   -
     id: everactive-cli-snap
-    name: carlos-everactive-cli
+    name: everactive-cli
     publish: true
     summary: CLI for the Everactive IoT Platform
     description: A tool to interact with the Everactive IoT Platform APIs from the command line
-    grade: devel
+    grade: stable
     confinement: strict
     base: core20
     license: MIT
