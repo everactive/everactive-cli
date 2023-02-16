@@ -14,10 +14,25 @@ The tool is compatible with Windows, macOS, and Linux.
 
 # Installation
 
-Download the binary for your platform from the Package Registry: https://gitlab.com/everactive/everactive-cli/-/packages/
+## Pre-built binary
+Download the binary for your platform from the Releases section https://github.com/everactive/everactive-cli/releases.
 
+## Homebrew
 
-> TODO: brew, scoop, snap, etc?
+```
+$ brew tap everactive/everactive-cli https://github.com/everactive/everactive-cli.git
+$ brew install everactive-cli
+
+```
+
+## Snap
+
+https://snapcraft.io/everactive-cli
+
+```
+$ snap install everactive-cli 
+```
+
 
 # Build
 
