@@ -1,0 +1,79 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    main: main.go
+    #ldflags:
+    #  - -X "gitlab.com/everactive/everactive-cli/lib.Version={{.Version}}"
+archives:
+  - format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of uname.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+    - goos: windows
+      format: zip
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  skip: true
+release:
+  github:
+    owner: everactive
+    name: everactive-cli
+  extra_files:
+    - glob: ./changelog.yaml
+brews:
+  -
+    name: everactive-cli
+    tap:
+      owner: everactive
+      name: everactive-cli
+    commit_author:
+      name: everactive
+      email: "developers@everactive.com"
+    homepage: "https://everactive.com"
+    description: "CLI for the Everactive IoT Platform"
+    license: "MIT"
+
+snapcrafts:
+  -
+    id: everactive-cli-snap
+    name: everactive-cli
+    publish: true
+    summary: CLI for the Everactive IoT Platform
+    description: A tool to interact with the Everactive IoT Platform APIs from the command line
+    grade: stable
+    confinement: strict
+    base: core20
+    license: MIT
+    plugs:
+      personal-files:
+        write:
+          - $HOME/.everactive
+          - $HOME/.everactive/config.yaml
+
+# The lines beneath this are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/use them.
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
